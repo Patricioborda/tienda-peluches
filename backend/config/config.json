@@ -1,0 +1,20 @@
+{
+  "development": {
+    "username": "root",
+    "password": "peluche123",
+    "database": "peluches_db",
+    "host": "mysql",
+    "port": 3306,
+    "dialect": "mysql",
+    "logging": true
+  },
+  "production": {
+    "username": "root",
+    "password": "peluche123",
+    "database": "peluches_db", 
+    "host": "mysql",
+    "port": 3306,
+    "dialect": "mysql",
+    "logging": false
+  }
+}
