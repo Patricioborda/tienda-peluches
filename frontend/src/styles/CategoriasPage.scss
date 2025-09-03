@@ -1,89 +1,56 @@
-/* CategoriasPage.scss */
 .categorias-page {
   padding: 2rem;
-
-  h1 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
+  max-width: 800px;
+  margin: 0 auto;
 
   .filtro-input {
-    padding: 0.5rem;
-    font-size: 1rem;
     width: 100%;
-    max-width: 300px;
-    margin-bottom: 1rem;
+    padding: 0.5rem 1rem;
+    margin-bottom: 1.5rem;
     border: 1px solid #ccc;
     border-radius: 6px;
+    font-size: 1rem;
   }
 
   .categorias-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
     list-style: none;
     padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
 
     .categoria-card {
       padding: 1rem;
       border: 1px solid #ddd;
       border-radius: 8px;
-      background-color: #fafafa;
-      min-width: 150px;
-      text-align: center;
+      background-color: #fff;
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
-      align-items: center;
+
+      span {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
 
       .actions {
         display: flex;
+        justify-content: flex-end;
         gap: 0.5rem;
 
-        button {
-          padding: 0.3rem 0.6rem;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-          &:hover {
-            opacity: 0.8;
-          }
-        }
         button:first-child {
-          background-color: #4caf50;
-          color: white;
+          background-color: #4caf50; /* verde editar */
         }
+
         button:last-child {
-          background-color: #f44336;
-          color: white;
+          background-color: #f44336; /* rojo eliminar */
         }
       }
     }
   }
-}
 
-/* CategoriaForm.scss */
-.categoria-form {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-
-  input {
-    padding: 0.5rem;
-    font-size: 1rem;
-    flex: 1;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-  }
-
-  button {
-    padding: 0.5rem 1rem;
-    background-color: #1976d2;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    &:hover {
-      opacity: 0.9;
-    }
+  p {
+    text-align: center;
+    color: #666;
   }
 }

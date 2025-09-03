@@ -1,6 +1,7 @@
+// frontend/src/pages/CategoriasPage.jsx
 import React, { useEffect, useState } from 'react';
-import { getCategorias, deleteCategoria } from '../services/categoriasService';
-import CategoriaForm from './CategoriaForm';
+import { getCategorias, deleteCategoria } from '../services/categoriasService.js';
+import CategoriaForm from './CategoriaForm.jsx';
 import '../styles/CategoriasPage.scss';
 
 const CategoriasPage = () => {
@@ -16,6 +17,7 @@ const CategoriasPage = () => {
       setCategorias(data);
     } catch (error) {
       alert('Error cargando categorías');
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -32,10 +34,11 @@ const CategoriasPage = () => {
       fetchCategorias();
     } catch (error) {
       alert('Error eliminando categoría');
+      console.error(error);
     }
   };
 
-  const categoriasFiltradas = categorias.filter((c) =>
+  const categoriasFiltradas = categorias.filter(c =>
     c.nombre.toLowerCase().includes(filtro.toLowerCase())
   );
 
