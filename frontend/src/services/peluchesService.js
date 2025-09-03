@@ -24,20 +24,33 @@ export const deletePeluche = async (id) => {
 
 export const createPeluche = async (pelucheData) => {
   try {
-    const res = await axios.post(`${API_URL}/peluches`, pelucheData);
+    // Si imagen o descripción están vacías, enviamos null
+    const dataToSend = {
+      ...pelucheData,
+      imagen: pelucheData.imagen?.trim() || null,
+      descripcion: pelucheData.descripcion?.trim() || null,
+    };
+
+    const res = await axios.post(`${API_URL}/peluches`, dataToSend);
     return res.data;
   } catch (error) {
-    console.error('Error al crear peluche:', error);
+    console.error('Error al crear peluche:', error.response?.data || error.message);
     throw error;
   }
 };
 
 export const updatePeluche = async (id, data) => {
   try {
-    const res = await axios.put(`${API_URL}/peluches/${id}`, data);
+    const dataToSend = {
+      ...data,
+      imagen: data.imagen?.trim() || null,
+      descripcion: data.descripcion?.trim() || null,
+    };
+
+    const res = await axios.put(`${API_URL}/peluches/${id}`, dataToSend);
     return res.data;
   } catch (error) {
-    console.error('Error al actualizar peluche:', error);
+    console.error('Error al actualizar peluche:', error.response?.data || error.message);
     throw error;
   }
 };

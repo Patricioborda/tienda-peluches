@@ -36,6 +36,14 @@ const Peluche = sequelize.define('Peluche', {
     type: DataTypes.STRING(255),
     allowNull: true,
     validate: { isUrl: { msg: 'Debe ser URL válida' } }
+  },
+  categoriaId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'categorias',
+      key: 'id'
+    }
   }
 }, {
   tableName: 'peluches',

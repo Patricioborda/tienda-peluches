@@ -1,6 +1,5 @@
 const { body, param, validationResult } = require('express-validator');
-
-const categoriasValidas = ['Osos', 'Unicornios', 'Perros', 'Gatos', 'Conejos', 'Otros'];
+const Categoria = require('../../Categorias/models/Categoria'); // Ajustá según tu estructura real
 
 const validatePelucheBody = [
   body('nombre')
@@ -21,12 +20,18 @@ const validatePelucheBody = [
     .isInt({ min: 0 }).withMessage('El stock debe ser un entero >= 0'),
 
   body('imagen')
-    .optional()
+    .optional({ nullable: true, checkFalsy: true }) // <- permite null o ''
     .isURL().withMessage('La imagen debe ser una URL válida'),
 
-  body('categoria')
+
+  body('categoriaId')
     .notEmpty().withMessage('La categoría es obligatoria')
-    .isIn(categoriasValidas).withMessage(`La categoría debe ser una de: ${categoriasValidas.join(', ')}`),
+    .isInt({ min: 1 }).withMessage('La categoría debe ser un id válido')
+    .bail()
+    .custom(async (value) => {
+      const categoria = await Categoria.findByPk(value);
+      if (!categoria) return Promise.reject('La categoría seleccionada no existe');
+    }),
 ];
 
 const validateIdParam = [

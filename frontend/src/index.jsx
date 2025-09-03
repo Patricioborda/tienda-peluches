@@ -1,7 +1,8 @@
+// frontend/src/index.jsx
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.js'; // <- extensión obligatoria por type: module
-import './styles/global.scss'; // archivo de estilos globales
+import App from './App.jsx'; // extensión .jsx consistente
+import './styles/global.scss'; // estilos globales
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
