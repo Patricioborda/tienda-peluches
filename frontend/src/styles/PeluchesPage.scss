@@ -1,0 +1,45 @@
+.peluches-page {
+  padding: 20px;
+
+  h1 {
+    text-align: center;
+  }
+
+  .peluches-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+
+    .peluche-item {
+      border: 1px solid #ddd;
+      padding: 10px;
+      width: 200px;
+      text-align: center;
+      border-radius: 8px;
+      transition: transform 0.2s;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+
+      img {
+        width: 100%;
+        height: auto;
+        border-radius: 4px;
+      }
+
+      h2 {
+        font-size: 18px;
+        margin: 10px 0 5px;
+      }
+
+      p {
+        margin: 5px 0;
+        font-size: 14px;
+      }
+    }
+  }
+}
