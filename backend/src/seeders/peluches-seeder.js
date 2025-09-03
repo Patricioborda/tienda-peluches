@@ -1,8 +1,19 @@
 'use strict';
 
 module.exports = {
-  async up (queryInterface) {
+  async up(queryInterface, Sequelize) {
     const now = new Date();
+
+    // Primero obtenemos las categorías ya insertadas para tomar sus IDs
+    const categorias = await queryInterface.sequelize.query(
+      `SELECT id, nombre FROM categorias;`
+    );
+
+    const categoriaMap = {};
+    categorias[0].forEach(cat => {
+      categoriaMap[cat.nombre] = cat.id;
+    });
+
     await queryInterface.bulkInsert('peluches', [
       {
         nombre: 'Osito Teddy Clásico',
@@ -10,8 +21,9 @@ module.exports = {
         precio: 12500.50,
         stock: 25,
         imagen: 'https://example.com/osos/teddy.jpg',
-        categoria: 'Osos',
-        createdAt: now, updatedAt: now
+        categoriaId: categoriaMap['Osos'],
+        createdAt: now,
+        updatedAt: now
       },
       {
         nombre: 'Unicornio Arcoíris',
@@ -19,8 +31,9 @@ module.exports = {
         precio: 18999.99,
         stock: 15,
         imagen: 'https://example.com/unicornios/rainbow.jpg',
-        categoria: 'Unicornios',
-        createdAt: now, updatedAt: now
+        categoriaId: categoriaMap['Unicornios'],
+        createdAt: now,
+        updatedAt: now
       },
       {
         nombre: 'Perrito Beagle',
@@ -28,13 +41,14 @@ module.exports = {
         precio: 9900.00,
         stock: 30,
         imagen: 'https://example.com/perros/beagle.jpg',
-        categoria: 'Perros',
-        createdAt: now, updatedAt: now
+        categoriaId: categoriaMap['Perros'],
+        createdAt: now,
+        updatedAt: now
       }
     ]);
   },
 
-  async down (queryInterface) {
+  async down(queryInterface) {
     await queryInterface.bulkDelete('peluches', null, {});
   }
 };

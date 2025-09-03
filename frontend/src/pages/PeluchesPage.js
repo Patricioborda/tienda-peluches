@@ -1,62 +1,43 @@
-import React, { useEffect, useState } from 'react';
-import { getPeluches, createPeluche, updatePeluche, deletePeluche } from '../services/peluchesService.js';
-import Swal from 'sweetalert2';
-import '../styles/PeluchesPage.scss';
+import React, { useState, useEffect } from "react";
+import { getPeluches, deletePeluche } from "../services/peluchesService.js";
+import Swal from "sweetalert2";
+import CreatePeluchePage from "./CreatePeluchePage.js";
+import "../styles/PeluchesPage.scss";
 
-const PeluchesPage = () => {
+function PeluchesPage() {
   const [peluches, setPeluches] = useState([]);
-  const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({ id: null, nombre: '', precio: 0, imagen: '' });
-
-  const fetchPeluches = async () => {
-    try {
-      const data = await getPeluches();
-      setPeluches(data);
-    } catch (error) {
-      console.error('Error al traer peluches:', error);
-    }
-  };
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     fetchPeluches();
   }, []);
 
-  const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const fetchPeluches = async () => {
     try {
-      if (formData.id) {
-        // Update
-        await updatePeluche(formData.id, formData);
-        Swal.fire('Actualizado!', 'El peluche se actualizó correctamente', 'success');
-      } else {
-        // Create
-        await createPeluche(formData);
-        Swal.fire('Creado!', 'El peluche se creó correctamente', 'success');
-      }
-      setShowForm(false);
-      setFormData({ id: null, nombre: '', precio: 0, imagen: '' });
-      fetchPeluches();
-    } catch (error) {
-      Swal.fire('Error', 'Hubo un problema al guardar', 'error');
+      const data = await getPeluches();
+      setPeluches(data);
+    } catch (err) {
+      console.error(err);
     }
   };
 
-  const handleEdit = (peluche) => {
-    setFormData(peluche);
-    setShowForm(true);
-  };
-
   const handleDelete = async (id) => {
-    if (window.confirm('¿Estás seguro de eliminar este peluche?')) {
+    const result = await Swal.fire({
+      title: "¿Estás seguro?",
+      text: "No podrás revertir esto",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar"
+    });
+
+    if (result.isConfirmed) {
       try {
         await deletePeluche(id);
+        Swal.fire("Eliminado", "Peluche eliminado correctamente", "success");
         fetchPeluches();
-      } catch (error) {
-        console.error('Error al eliminar peluche', error);
+      } catch (err) {
+        Swal.fire("Error", "No se pudo eliminar el peluche", "error");
       }
     }
   };
@@ -64,36 +45,31 @@ const PeluchesPage = () => {
   return (
     <div className="peluches-page">
       <h1>Peluches</h1>
-      <button onClick={() => setShowForm(true)}>Agregar Peluche</button>
+      <button className="btn-primary" onClick={() => setShowModal(true)}>Agregar Peluche</button>
 
       <ul className="peluches-list">
-        {peluches.map((p) => (
-          <li key={p.id} className="peluche-item">
-            <img src={p.imagen} alt={p.nombre} />
-            <h2>{p.nombre}</h2>
-            <p>${p.precio}</p>
-            <button onClick={() => handleEdit(p)}>Editar</button>
-            <button onClick={() => handleDelete(p.id)}>Eliminar</button>
+        {peluches.map(peluche => (
+          <li key={peluche.id} className="peluche-item">
+            <img src={peluche.imagen || "https://via.placeholder.com/200"} alt={peluche.nombre} />
+            <h2>{peluche.nombre}</h2>
+            <p>{peluche.descripcion}</p>
+            <p>Precio: ${peluche.precio}</p>
+            <p>Stock: {peluche.stock}</p>
+            <p>Categoría: {peluche.categoria?.nombre || "Sin categoría"}</p>
+            <button className="btn-primary" onClick={() => Swal.fire("Editar", "Funcionalidad pendiente", "info")}>Editar</button>
+            <button className="btn-secondary" onClick={() => handleDelete(peluche.id)}>Eliminar</button>
           </li>
         ))}
       </ul>
 
-      {showForm && (
-        <div className="form-overlay">
-          <form className="peluche-form" onSubmit={handleSubmit}>
-            <h2>{formData.id ? 'Editar Peluche' : 'Nuevo Peluche'}</h2>
-            <input type="text" name="nombre" placeholder="Nombre" value={formData.nombre} onChange={handleInputChange} required />
-            <input type="number" name="precio" placeholder="Precio" value={formData.precio} onChange={handleInputChange} required />
-            <input type="text" name="imagen" placeholder="URL Imagen" value={formData.imagen} onChange={handleInputChange} required />
-            <div className="form-buttons">
-              <button type="submit">{formData.id ? 'Actualizar' : 'Crear'}</button>
-              <button type="button" onClick={() => { setShowForm(false); setFormData({ id: null, nombre: '', precio: 0, imagen: '' }); }}>Cancelar</button>
-            </div>
-          </form>
-        </div>
+      {showModal && (
+        <CreatePeluchePage 
+          onClose={() => setShowModal(false)} 
+          onSuccess={fetchPeluches} 
+        />
       )}
     </div>
   );
-};
+}
 
 export default PeluchesPage;

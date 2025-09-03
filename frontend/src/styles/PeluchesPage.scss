@@ -1,3 +1,4 @@
+/* PeluchesPage.css */
 .peluches-page {
   padding: 20px;
 
@@ -5,6 +6,12 @@
     text-align: center;
   }
 
+  .btn-primary {
+    margin: 10px auto;
+    display: block;
+  }
+
+  /* Listado tipo tarjetas */
   .peluches-list {
     display: flex;
     flex-wrap: wrap;
@@ -41,7 +48,6 @@
         font-size: 14px;
       }
 
-      /* Botón con estilo global */
       button {
         margin-top: 10px;
         width: 100%;
@@ -49,8 +55,8 @@
     }
   }
 
-  /* Modal / Formulario emergente */
-  .form-overlay {
+  /* Modal */
+  .modal {
     position: fixed;
     top: 0;
     left: 0;
@@ -58,37 +64,39 @@
     height: 100%;
     background-color: rgba(0,0,0,0.5);
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     z-index: 1000;
 
-    .peluche-form {
-      background-color: #fff;
+    .modal-content {
+      background-color: white;
       padding: 20px;
-      border-radius: 10px;
+      border-radius: 8px;
       width: 400px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+      max-width: 90%;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
 
       h2 {
         text-align: center;
-        margin-bottom: 10px;
+      }
+
+      .modal-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-top: 10px;
+
+        .btn-secondary {
+          background-color: #6c757d;
+        }
       }
 
       input {
+        width: 100%;
         padding: 8px;
-        border-radius: 5px;
+        margin: 5px 0;
+        border-radius: 4px;
         border: 1px solid #ccc;
-      }
-
-      .form-buttons {
-        display: flex;
-        justify-content: space-between;
-
-        button {
-          width: 48%;
-        }
       }
     }
   }
