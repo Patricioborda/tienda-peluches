@@ -21,3 +21,23 @@ export const deletePeluche = async (id) => {
     throw error;
   }
 };
+
+export const createPeluche = async (pelucheData) => {
+  try {
+    const res = await axios.post(`${API_URL}/peluches`, pelucheData);
+    return res.data;
+  } catch (error) {
+    console.error('Error al crear peluche:', error);
+    throw error;
+  }
+};
+
+export const updatePeluche = async (id, data) => {
+  try {
+    const res = await axios.put(`${API_URL}/peluches/${id}`, data);
+    return res.data;
+  } catch (error) {
+    console.error('Error al actualizar peluche:', error);
+    throw error;
+  }
+};
