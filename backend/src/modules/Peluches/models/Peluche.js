@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../../../utils/database');
+const Categoria = require('../../Categorias/models/Categoria');
 
 const Peluche = sequelize.define('Peluche', {
   id: {
@@ -40,14 +41,15 @@ const Peluche = sequelize.define('Peluche', {
   categoriaId: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    references: {
-      model: 'categorias',
-      key: 'id'
-    }
+    references: { model: 'categorias', key: 'id' },
+    validate: { notEmpty: { msg: 'Debe seleccionar una categoría' } }
   }
 }, {
   tableName: 'peluches',
   timestamps: true
 });
+
+// Relaciones
+Peluche.belongsTo(Categoria, { foreignKey: 'categoriaId', as: 'categoria' });
 
 module.exports = Peluche;

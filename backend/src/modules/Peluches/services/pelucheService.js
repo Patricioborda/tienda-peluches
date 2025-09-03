@@ -1,4 +1,5 @@
 const repo = require('../repositories/pelucheRepository');
+const Categoria = require('../../Categorias/models/Categoria');
 
 const list = () => repo.getAll();
 
@@ -13,17 +14,28 @@ const get = async (id) => {
 };
 
 const create = async (data) => {
-  // Reglas de negocio de ejemplo
-  if (Number(data.precio) < 0) {
-    const e = new Error('El precio no puede ser negativo');
-    e.statusCode = 400;
-    throw e;
-  }
+  // Validaciones básicas
+  if (Number(data.precio) < 0) throw Object.assign(new Error('El precio no puede ser negativo'), { statusCode: 400 });
+  if (Number(data.stock) < 0) throw Object.assign(new Error('El stock no puede ser negativo'), { statusCode: 400 });
+
+  // Validar categoría
+  const categoria = await Categoria.findByPk(data.categoriaId);
+  if (!categoria) throw Object.assign(new Error('Categoría no válida'), { statusCode: 400 });
+
   return repo.create(data);
 };
 
 const update = async (id, data) => {
   const entity = await get(id);
+
+  if (data.precio && Number(data.precio) < 0) throw Object.assign(new Error('El precio no puede ser negativo'), { statusCode: 400 });
+  if (data.stock && Number(data.stock) < 0) throw Object.assign(new Error('El stock no puede ser negativo'), { statusCode: 400 });
+
+  if (data.categoriaId) {
+    const categoria = await Categoria.findByPk(data.categoriaId);
+    if (!categoria) throw Object.assign(new Error('Categoría no válida'), { statusCode: 400 });
+  }
+
   return repo.update(entity, data);
 };
 
