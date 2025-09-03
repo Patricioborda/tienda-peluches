@@ -1,29 +1,29 @@
-const service = require('../services/pelucheService');
+const service = require('../services/productService');
 
-exports.getPeluches = async (req, res, next) => {
+exports.getProductos = async (req, res, next) => {
   try {
     const data = await service.list();
     res.json(data);
   } catch (err) { next(err); }
 };
 
-exports.getPeluche = async (req, res, next) => {
+exports.getProducto = async (req, res, next) => {
   try {
     const data = await service.get(parseInt(req.params.id, 10));
     res.json(data);
   } catch (err) { next(err); }
 };
 
-exports.createPeluche = async (req, res, next) => {
+exports.createProducto = async (req, res, next) => {
   try {
     const data = await service.create(req.body);
     res.status(201).json(data);
-  } catch (err) { 
+  } catch (err) {
     res.status(err.statusCode || 500).json({ success: false, error: err.message });
   }
 };
 
-exports.updatePeluche = async (req, res, next) => {
+exports.updateProducto = async (req, res, next) => {
   try {
     const data = await service.update(parseInt(req.params.id, 10), req.body);
     res.json(data);
@@ -32,7 +32,7 @@ exports.updatePeluche = async (req, res, next) => {
   }
 };
 
-exports.deletePeluche = async (req, res, next) => {
+exports.deleteProducto = async (req, res, next) => {
   try {
     const data = await service.remove(parseInt(req.params.id, 10));
     res.json(data);

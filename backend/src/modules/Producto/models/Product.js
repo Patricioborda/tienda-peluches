@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 const { sequelize } = require('../../../utils/database');
 const Categoria = require('../../Categorias/models/Categoria');
 
-const Peluche = sequelize.define('Peluche', {
+const Producto = sequelize.define('Producto', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -13,7 +13,7 @@ const Peluche = sequelize.define('Peluche', {
     type: DataTypes.STRING(100),
     allowNull: false,
     validate: {
-      notEmpty: { msg: 'El nombre del peluche es obligatorio' },
+      notEmpty: { msg: 'El nombre del producto es obligatorio' },
       len: { args: [2, 100], msg: 'El nombre debe tener entre 2 y 100 caracteres' }
     }
   },
@@ -25,7 +25,10 @@ const Peluche = sequelize.define('Peluche', {
   precio: {
     type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
-    validate: { isDecimal: { msg: 'El precio debe ser decimal' }, min: { args: [0], msg: 'No puede ser negativo' } }
+    validate: { 
+      isDecimal: { msg: 'El precio debe ser decimal' },
+      min: { args: [0], msg: 'No puede ser negativo' }
+    }
   },
   stock: {
     type: DataTypes.INTEGER,
@@ -43,13 +46,13 @@ const Peluche = sequelize.define('Peluche', {
     allowNull: false,
     references: { model: 'categorias', key: 'id' },
     validate: { notEmpty: { msg: 'Debe seleccionar una categoría' } }
-  }
+  },
 }, {
-  tableName: 'peluches',
+  tableName: 'productos',
   timestamps: true
 });
 
 // Relaciones
-Peluche.belongsTo(Categoria, { foreignKey: 'categoriaId', as: 'categoria' });
+Producto.belongsTo(Categoria, { foreignKey: 'categoriaId', as: 'categoria' });
 
-module.exports = Peluche;
+module.exports = Producto;

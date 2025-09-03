@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/health', (req, res) => {
   res.status(200).json({
     status: 'OK',
-    message: 'Peluches API funcionando correctamente',
+    message: 'Productos API funcionando correctamente',
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV,
   });
@@ -49,7 +49,7 @@ app.use(errorHandler);
   try {
     await connectDatabase(); // autentica y sync en development
     app.listen(PORT, '0.0.0.0', () => {
-      console.log(`🧸 Peluches API corriendo en puerto ${PORT}`);
+      console.log(`🛍️ Productos API corriendo en puerto ${PORT}`);
       console.log(`🌍 Entorno: ${process.env.NODE_ENV}`);
       console.log(`📊 Base de datos: ${process.env.DB_HOST}:${process.env.DB_PORT || 3306}/${process.env.DB_NAME}`);
       console.log(`📂 Rutas de categorías activas: /api/categorias`);

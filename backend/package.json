@@ -1,31 +1,39 @@
 {
-  "name": "peluches-backend",
+  "name": "capibara-backend",
   "version": "1.0.0",
-  "description": "Backend API para tienda de peluches",
+  "description": "Backend API para tienda Capitán Capibara",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "db:create": "node scripts/createDatabase.js",
+    "db:drop": "npx sequelize-cli db:drop",
     "migrate": "npx sequelize-cli db:migrate",
     "migrate:undo": "npx sequelize-cli db:migrate:undo",
     "seed": "npx sequelize-cli db:seed:all",
     "seed:undo": "npx sequelize-cli db:seed:undo:all",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "reset:db": "npm run db:drop && npm run db:create && npm run migrate && npm run seed"
   },
-  "keywords": ["peluches", "api", "crud", "express", "sequelize"],
-  "author": "Tu Nombre",
+  "keywords": [
+    "capibara",
+    "api",
+    "crud",
+    "express",
+    "sequelize"
+  ],
+  "author": "Patricio",
   "license": "MIT",
   "dependencies": {
-    "express": "^5.0.0",
-    "sequelize": "^6.35.0",
-    "mysql2": "^3.6.3",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
+    "express": "^5.0.0",
     "express-validator": "^7.0.1",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "mysql2": "^3.6.3",
+    "sequelize": "^6.35.0"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1",
+    "nodemon": "^3.1.10",
     "sequelize-cli": "^6.6.2"
   }
 }

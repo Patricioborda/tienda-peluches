@@ -1,4 +1,4 @@
-const repo = require('../repositories/pelucheRepository');
+const repo = require('../repositories/productRepository');
 const Categoria = require('../../Categorias/models/Categoria');
 
 const list = () => repo.getAll();
@@ -6,7 +6,7 @@ const list = () => repo.getAll();
 const get = async (id) => {
   const entity = await repo.getById(id);
   if (!entity) {
-    const error = new Error('Peluche no encontrado');
+    const error = new Error('Producto no encontrado');
     error.statusCode = 404;
     throw error;
   }
@@ -14,11 +14,9 @@ const get = async (id) => {
 };
 
 const create = async (data) => {
-  // Validaciones básicas
   if (Number(data.precio) < 0) throw Object.assign(new Error('El precio no puede ser negativo'), { statusCode: 400 });
   if (Number(data.stock) < 0) throw Object.assign(new Error('El stock no puede ser negativo'), { statusCode: 400 });
 
-  // Validar categoría
   const categoria = await Categoria.findByPk(data.categoriaId);
   if (!categoria) throw Object.assign(new Error('Categoría no válida'), { statusCode: 400 });
 
@@ -42,7 +40,7 @@ const update = async (id, data) => {
 const remove = async (id) => {
   const entity = await get(id);
   await repo.remove(entity);
-  return { message: 'Peluche eliminado correctamente' };
+  return { message: 'Producto eliminado correctamente' };
 };
 
 module.exports = { list, get, create, update, remove };

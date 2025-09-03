@@ -1,14 +1,13 @@
-// backend/src/seeders/categorias-seeder.js
 'use strict';
-const { Categoria } = require('../modules/Categorias/models/Categoria');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert('categorias', [
-      { nombre: 'Osos', createdAt: new Date(), updatedAt: new Date() },
-      { nombre: 'Unicornios', createdAt: new Date(), updatedAt: new Date() },
-      { nombre: 'Perros', createdAt: new Date(), updatedAt: new Date() },
-      { nombre: 'Gatos', createdAt: new Date(), updatedAt: new Date() },
+      { nombre: 'Peluches', createdAt: new Date(), updatedAt: new Date() },
+      { nombre: 'Juguetes', createdAt: new Date(), updatedAt: new Date() },
+      { nombre: 'Ropa Infantil', createdAt: new Date(), updatedAt: new Date() },
+      { nombre: 'Accesorios', createdAt: new Date(), updatedAt: new Date() },
+      { nombre: 'Decoración', createdAt: new Date(), updatedAt: new Date() }
     ]);
   },
 

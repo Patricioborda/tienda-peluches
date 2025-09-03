@@ -1,15 +1,15 @@
 // frontend/src/pages/HomePage.jsx
 import React from "react";
 import { Link } from "react-router-dom";
-import "../styles/global.scss"; // Usamos el global para estilos base
+import "../styles/global.scss"; // estilos base
 
 const HomePage = () => {
   return (
     <div className="home-page" style={{ padding: "20px", textAlign: "center" }}>
-      <h1>Bienvenido a la Tienda de Peluches</h1>
-      <p>Explora nuestros peluches y encuentra tu favorito.</p>
+      <h1>Bienvenido a la Tienda de Productos</h1>
+      <p>Explora nuestros productos y encuentra tu favorito.</p>
       <Link
-        to="/peluches"
+        to="/productos"
         style={{
           display: "inline-block",
           marginTop: "20px",
@@ -22,7 +22,7 @@ const HomePage = () => {
           transition: "background-color 0.2s, transform 0.2s",
         }}
       >
-        Ver Peluches
+        Ver Productos
       </Link>
     </div>
   );

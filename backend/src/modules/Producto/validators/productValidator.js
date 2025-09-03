@@ -1,10 +1,10 @@
 const { body, param, validationResult } = require('express-validator');
-const Categoria = require('../../Categorias/models/Categoria'); // Ajustá según tu estructura real
+const Categoria = require('../../Categorias/models/Categoria');
 
-const validatePelucheBody = [
+const validateProductoBody = [
   body('nombre')
     .trim()
-    .notEmpty().withMessage('El nombre del peluche es obligatorio')
+    .notEmpty().withMessage('El nombre es obligatorio')
     .isLength({ min: 2, max: 100 }).withMessage('El nombre debe tener entre 2 y 100 caracteres'),
 
   body('descripcion')
@@ -13,16 +13,15 @@ const validatePelucheBody = [
 
   body('precio')
     .notEmpty().withMessage('El precio es obligatorio')
-    .isDecimal().withMessage('El precio debe ser un número decimal'),
+    .isDecimal().withMessage('El precio debe ser decimal'),
 
   body('stock')
     .notEmpty().withMessage('El stock es obligatorio')
     .isInt({ min: 0 }).withMessage('El stock debe ser un entero >= 0'),
 
   body('imagen')
-    .optional({ nullable: true, checkFalsy: true }) // <- permite null o ''
+    .optional({ nullable: true, checkFalsy: true })
     .isURL().withMessage('La imagen debe ser una URL válida'),
-
 
   body('categoriaId')
     .notEmpty().withMessage('La categoría es obligatoria')
@@ -32,6 +31,10 @@ const validatePelucheBody = [
       const categoria = await Categoria.findByPk(value);
       if (!categoria) return Promise.reject('La categoría seleccionada no existe');
     }),
+
+  body('tipo')
+    .notEmpty().withMessage('El tipo de producto es obligatorio')
+    .isIn(['peluche', 'juguete', 'llavero']).withMessage('Tipo inválido')
 ];
 
 const validateIdParam = [
@@ -47,4 +50,4 @@ const handleValidation = (req, res, next) => {
   next();
 };
 
-module.exports = { validatePelucheBody, validateIdParam, handleValidation };
+module.exports = { validateProductoBody, validateIdParam, handleValidation };

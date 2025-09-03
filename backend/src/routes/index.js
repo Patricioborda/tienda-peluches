@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const pelucheRoutes = require('../modules/Peluches/routes/pelucheRoutes');
+const productosRoutes = require('../modules/Producto/routes/productRoutes');
+const categoriasRoutes = require('../modules/Categorias/routes/categoriasRoutes');
 
-router.use('/peluches', pelucheRoutes);
+router.use('/productos', productosRoutes);
+router.use('/categorias', categoriasRoutes);
 
 module.exports = router;

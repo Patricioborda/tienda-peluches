@@ -1,8 +1,8 @@
-const Peluche = require('../models/Peluche');
+const Producto = require('../../Producto/models/Product');
 const Categoria = require('../../Categorias/models/Categoria');
 
 const getAll = async () => {
-  return Peluche.findAll({
+  return Producto.findAll({
     include: [
       {
         model: Categoria,
@@ -15,7 +15,7 @@ const getAll = async () => {
 };
 
 const getById = async (id) => {
-  return Peluche.findByPk(id, {
+  return Producto.findByPk(id, {
     include: [
       {
         model: Categoria,
@@ -26,10 +26,10 @@ const getById = async (id) => {
   });
 };
 
-const create = async (data) => Peluche.create(data);
+const create = async (data) => Producto.create(data);
 
-const update = async (peluche, data) => peluche.update(data);
+const update = async (producto, data) => producto.update(data);
 
-const remove = async (peluche) => peluche.destroy();
+const remove = async (producto) => producto.destroy();
 
 module.exports = { getAll, getById, create, update, remove };

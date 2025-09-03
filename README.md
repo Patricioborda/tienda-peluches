@@ -1,4 +1,4 @@
-# 🧸 peluchesApp
+# 🧸 Tienda Capitan Capibara
 Sistema integral de gestión para tienda de peluches online.  
 Frontend en **React 19 + SCSS** · Backend en **Node 20 + Express 5 + Sequelize 6** · Base de datos **MySQL 8** · Orquestado con **Docker Compose**.
 ---
@@ -25,8 +25,8 @@ Frontend en **React 19 + SCSS** · Backend en **Node 20 + Express 5 + Sequelize 
 peluchesApp/
 ├── backend/
 │   ├── src/
-│   │   ├── modules/            # → 1 módulo = 1 carpeta (Peluches, Categorias, …)
-│   │   │   └── Peluches/
+│   │   ├── modules/            # → 1 módulo = 1 carpeta (Producto, Categorias, …)
+│   │   │   └── Producto/
 │   │   │       ├── controllers/
 │   │   │       ├── models/
 │   │   │       ├── repositories/
@@ -62,30 +62,31 @@ peluchesApp/
 └── README.md   ← este archivo
 ```
 
-## 🧸 Modelo de datos - Peluches
+## 🧸 Modelo de datos - Productos
 
-### Tabla: `peluches`
+### Tabla: `productos`
 | Campo | Tipo | Descripción | Ejemplo |
 |-------|------|-------------|---------|
-| `id` | INT AUTO_INCREMENT | ID único del peluche | 1 |
-| `nombre` | VARCHAR(100) | Nombre del peluche | "Osito Teddy Clásico" |
+| `id` | INT AUTO_INCREMENT | ID único del producto | 1 |
+| `nombre` | VARCHAR(100) | Nombre del producto | "Osito Teddy Clásico" |
 | `descripcion` | TEXT | Descripción detallada | "Peluche suave de oso marrón..." |
 | `precio` | DECIMAL(10,2) | Precio en pesos | 12500.50 |
 | `stock` | INT | Cantidad disponible | 25 |
 | `imagen` | VARCHAR(255) | URL de la imagen | "https://..." |
-| `categoria` | VARCHAR(50) | Categoría del peluche | "Osos", "Unicornios", "Perros" |
+| `categoria` | VARCHAR(50) | Categoría del producto | "Osos", "Unicornios", "Accesorios" |
 | `createdAt` | TIMESTAMP | Fecha de creación | Auto |
 | `updatedAt` | TIMESTAMP | Fecha de actualización | Auto |
 
-## 🔗 API Endpoints - CRUD Peluches
+## 🔗 API Endpoints - CRUD Productos
 
 | Método | Endpoint | Descripción |
 |--------|----------|-------------|
-| `GET` | `/api/peluches` | Obtener todos los peluches |
-| `GET` | `/api/peluches/:id` | Obtener un peluche específico |
-| `POST` | `/api/peluches` | Crear nuevo peluche |
-| `PUT` | `/api/peluches/:id` | Actualizar peluche existente |
-| `DELETE` | `/api/peluches/:id` | Eliminar peluche |
+| `GET` | `/api/productos` | Obtener todos los productos |
+| `GET` | `/api/productos/:id` | Obtener un producto específico |
+| `POST` | `/api/productos` | Crear nuevo producto |
+| `PUT` | `/api/productos/:id` | Actualizar producto existente |
+| `DELETE` | `/api/productos/:id` | Eliminar producto |
+
 
 ---
 
@@ -192,4 +193,4 @@ docker compose exec backend npx sequelize-cli db:seed:all
 ## 📬 Contacto
 
 Para bugs o sugerencias sobre **peluchesApp**, contactá al desarrollador.  
-¡Gracias por explorar este proyecto de tienda de peluches! 🧸
+¡Gracias por explorar este proyecto de tienda de peluches y juguetes! 🧸

@@ -60,7 +60,7 @@ $danger-color: #ef4444;
 }
 
 /* Modal completo */
-.create-peluche-modal {
+.create-producto-modal {
   position: fixed;
   inset: 0;
   z-index: 2000;
@@ -149,7 +149,7 @@ $danger-color: #ef4444;
   max-height: calc(90vh - 120px);
   overflow-y: auto;
 
-  .peluche-form {
+  .producto-form {
     display: flex;
     flex-direction: column;
     gap: 1.2rem;

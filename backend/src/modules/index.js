@@ -1,8 +1,8 @@
 const Categoria = require('./Categorias/models/Categoria');
-const Peluche = require('./Peluches/models/Peluche');
+const Producto = require('./Producto/models/Product');
 
 // Asociaciones
-Categoria.hasMany(Peluche, { foreignKey: 'categoriaId', onDelete: 'RESTRICT', onUpdate: 'CASCADE' });
-Peluche.belongsTo(Categoria, { foreignKey: 'categoriaId' });
+Categoria.hasMany(Producto, { foreignKey: 'categoriaId', onDelete: 'RESTRICT', onUpdate: 'CASCADE' });
+Producto.belongsTo(Categoria, { foreignKey: 'categoriaId' });
 
-module.exports = { Categoria, Peluche };
+module.exports = { Categoria, Producto };

@@ -1,4 +1,4 @@
-// src/styles/PeluchesPage.scss
+// src/styles/ProductPage.scss
 
 // Variables
 $primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -51,12 +51,11 @@ $black: #000000;
 }
 
 // Página principal
-.peluches-page {
+.product-page {
   min-height: 100vh;
   background: $primary-gradient;
   padding: 2rem 0;
 
-  // Loading state
   .loading-container {
     display: flex;
     flex-direction: column;
@@ -82,7 +81,7 @@ $black: #000000;
   }
 }
 
-// Header de la página
+// Header
 .page-header {
   max-width: 1200px;
   margin: 0 auto;
@@ -126,7 +125,7 @@ $black: #000000;
   }
 }
 
-// Botones principales
+// Botones
 .btn {
   @include button-base;
   font-size: 1rem;
@@ -221,7 +220,7 @@ $black: #000000;
   }
 }
 
-// Controles de búsqueda y filtros
+// Controles búsqueda/orden
 .controls-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -324,8 +323,8 @@ $black: #000000;
   }
 }
 
-// Grid de peluches
-.peluches-grid {
+// Grid de productos
+.product-grid {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
@@ -333,7 +332,7 @@ $black: #000000;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1.5rem;
 
-  .peluche-card {
+  .product-card {
     @include glass-effect;
     @include card-hover;
     border-radius: 20px;
@@ -419,9 +418,13 @@ $black: #000000;
         line-height: 1.5;
         margin-bottom: 1rem;
         display: -webkit-box;
+
+        /* Compatibilidad estándar */
+        line-clamp: 2;
+
+        /* Prefijo WebKit */
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
-        line-clamp: 2;
         overflow: hidden;
       }
 
@@ -460,23 +463,21 @@ $black: #000000;
   }
 }
 
-// Media queries para responsive design
+// Responsive
 @media (max-width: 768px) {
-  .peluches-page {
+  .product-page {
     padding: 1rem 0;
   }
 
-  .page-header {
-    .header-content {
-      flex-direction: column;
-      text-align: center;
-      padding: 1.5rem;
-    }
+  .page-header .header-content {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem;
+  }
 
-    .header-text .page-title {
-      font-size: 2rem;
-      justify-content: center;
-    }
+  .page-header .page-title {
+    font-size: 2rem;
+    justify-content: center;
   }
 
   .stats-container {
@@ -500,11 +501,11 @@ $black: #000000;
     }
   }
 
-  .peluches-grid {
+  .product-grid {
     grid-template-columns: 1fr;
     padding: 0 1rem;
 
-    .peluche-card .card-content .card-actions {
+    .product-card .card-content .card-actions {
       flex-direction: column;
     }
   }
@@ -542,7 +543,7 @@ $black: #000000;
 }
 
 @media (max-width: 360px) {
-  .peluches-page {
+  .product-page {
     padding: 0.5rem 0;
   }
 
@@ -553,7 +554,7 @@ $black: #000000;
     padding-right: 0.5rem;
   }
 
-  .peluches-grid {
+  .product-grid {
     padding: 0 0.5rem;
   }
 }

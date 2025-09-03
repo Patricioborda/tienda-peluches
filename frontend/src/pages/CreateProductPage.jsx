@@ -1,17 +1,16 @@
-// src/pages/CreatePeluchePage.jsx
 import React, { useState, useEffect } from "react";
 import { getCategorias } from "../services/categoriasService.js";
-import { createPeluche } from "../services/peluchesService.js";
-import '../styles/CreatePeluchePage.scss';
+import { createProducto, updateProducto } from "../services/productoService.js";
+import '../styles/CreateProductPage.scss';
 
-function CreatePeluchePage({ onClose, onSuccess }) {
+function CreateProductoPage({ onClose, onSuccess, producto }) {
   const [form, setForm] = useState({
-    nombre: "",
-    descripcion: "",
-    precio: "",
-    stock: "",
-    categoriaId: "",
-    imagen: "",
+    nombre: producto?.nombre || "",
+    descripcion: producto?.descripcion || "",
+    precio: producto?.precio || "",
+    stock: producto?.stock || "",
+    categoriaId: producto?.categoriaId || "",
+    imagen: producto?.imagen || "",
   });
 
   const [categorias, setCategorias] = useState([]);
@@ -54,7 +53,7 @@ function CreatePeluchePage({ onClose, onSuccess }) {
     setIsLoading(true);
 
     try {
-      const pelucheData = {
+      const productoData = {
         nombre: form.nombre.trim(),
         descripcion: form.descripcion.trim() || null,
         precio: parseFloat(form.precio),
@@ -63,17 +62,20 @@ function CreatePeluchePage({ onClose, onSuccess }) {
         imagen: form.imagen.trim() || null,
       };
 
-      console.log("Datos a enviar:", pelucheData);
-      await createPeluche(pelucheData);
+      if (producto?.id) {
+        await updateProducto(producto.id, productoData);
+      } else {
+        await createProducto(productoData);
+      }
 
       onSuccess();
       onClose();
     } catch (error) {
-      console.error("Error al crear peluche:", error.response?.data || error.message);
+      console.error("Error al guardar producto:", error.response?.data || error.message);
       alert(
         error.response?.data?.error
-          ? `No se pudo crear el peluche: ${error.response.data.error}`
-          : "No se pudo crear el peluche. Por favor, intente nuevamente."
+          ? `No se pudo guardar el producto: ${error.response.data.error}`
+          : "No se pudo guardar el producto. Por favor, intente nuevamente."
       );
     } finally {
       setIsLoading(false);
@@ -81,18 +83,18 @@ function CreatePeluchePage({ onClose, onSuccess }) {
   };
 
   return (
-    <div className="create-peluche-modal">
+    <div className="create-producto-modal">
       <div className="modal-overlay" onClick={onClose}></div>
       <div className="modal-content">
         <div className="modal-header">
-          <h2 className="modal-title">✨ Crear Nuevo Peluche</h2>
+          <h2 className="modal-title">{producto ? '✏️ Editar Producto' : '✨ Crear Nuevo Producto'}</h2>
           <button onClick={onClose} className="close-button" disabled={isLoading}>✕</button>
         </div>
 
         <div className="modal-body">
-          <form onSubmit={handleSubmit} className="peluche-form">
+          <form onSubmit={handleSubmit} className="producto-form">
             <div className="form-group">
-              <label className="form-label">🧸 Nombre del peluche</label>
+              <label className="form-label">🧸 Nombre del producto</label>
               <input
                 type="text"
                 name="nombre"
@@ -178,7 +180,7 @@ function CreatePeluchePage({ onClose, onSuccess }) {
 
             <div className="modal-actions">
               <button type="submit" className="btn btn-primary" disabled={isLoading}>
-                {isLoading ? "Creando..." : "Crear Peluche"}
+                {isLoading ? "Guardando..." : producto ? "Actualizar Producto" : "Crear Producto"}
               </button>
               <button type="button" className="btn btn-secondary" onClick={onClose} disabled={isLoading}>
                 Cancelar
@@ -191,4 +193,4 @@ function CreatePeluchePage({ onClose, onSuccess }) {
   );
 }
 
-export default CreatePeluchePage;
+export default CreateProductoPage;
