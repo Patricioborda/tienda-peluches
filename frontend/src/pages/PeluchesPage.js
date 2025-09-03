@@ -1,42 +1,57 @@
+// frontend/src/pages/PeluchesPage.js
 import React, { useEffect, useState } from 'react';
-import { getPeluches } from '../services/peluchesService.js';
-import '../styles/PeluchesPage.scss'; // Para estilos específicos de esta página
+import { getPeluches, deletePeluche } from '../services/peluchesService.js';
+import Swal from 'sweetalert2';
+import '../styles/PeluchesPage.scss';
 
 const PeluchesPage = () => {
   const [peluches, setPeluches] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  // Traer los peluches al montar el componente
   useEffect(() => {
-    const fetchPeluches = async () => {
-      try {
-        const data = await getPeluches();
-        setPeluches(data);
-      } catch (err) {
-        setError('No se pudieron cargar los peluches');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchPeluches();
   }, []);
 
-  if (loading) return <p>Cargando peluches...</p>;
-  if (error) return <p>{error}</p>;
+  const fetchPeluches = async () => {
+    try {
+      const data = await getPeluches();
+      setPeluches(data);
+    } catch (error) {
+      console.error('Error al cargar peluches:', error);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    const confirm = await Swal.fire({
+      title: '¿Seguro?',
+      text: 'No podrás revertir esta acción',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    });
+
+    if (confirm.isConfirmed) {
+      try {
+        await deletePeluche(id);
+        Swal.fire('Eliminado', 'El peluche fue eliminado con éxito', 'success');
+        fetchPeluches(); // refresca la lista
+      } catch (error) {
+        Swal.fire('Error', 'No se pudo eliminar el peluche', 'error');
+      }
+    }
+  };
 
   return (
     <div className="peluches-page">
-      <h1>Peluches Disponibles</h1>
+      <h1>Lista de Peluches</h1>
       <ul className="peluches-list">
-        {peluches.map((peluche) => (
-          <li key={peluche.id} className="peluche-item">
-            <img src={peluche.imagen} alt={peluche.nombre} />
-            <h2>{peluche.nombre}</h2>
-            <p>{peluche.descripcion}</p>
-            <p>Precio: ${peluche.precio}</p>
-            <p>Stock: {peluche.stock}</p>
+        {peluches.map((p) => (
+          <li key={p.id} className="peluche-item">
+            <img src={p.imagen} alt={p.nombre} />
+            <h2>{p.nombre}</h2>
+            <p>Precio: ${p.precio}</p>
+            <p>{p.descripcion}</p>
+            <button onClick={() => handleDelete(p.id)}>🗑 Eliminar</button>
           </li>
         ))}
       </ul>
