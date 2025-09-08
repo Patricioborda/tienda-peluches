@@ -80,7 +80,7 @@ const ProductPage = () => {
           {productos.map((p) => (
             <div key={p.id} className="product-card">
               <div className="card-image-container">
-                <img src={p.imagen || '/placeholder.png'} alt={p.nombre} className="card-image" />
+                <img src={p.imagen ? `/images/${p.imagen}` : '/images/default.png'} alt={p.nombre} className="card-image" onError={(e) => (e.target.src = '/images/default.png')}/>
                 <div className={`stock-badge ${p.stock > 5 ? 'high' : p.stock > 2 ? 'medium' : p.stock > 0 ? 'low' : 'empty'}`}>
                   {p.stock > 0 ? p.stock : 'Agotado'}
                 </div>

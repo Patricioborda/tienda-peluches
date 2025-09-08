@@ -31,10 +31,6 @@ const validateProductoBody = [
       const categoria = await Categoria.findByPk(value);
       if (!categoria) return Promise.reject('La categoría seleccionada no existe');
     }),
-
-  body('tipo')
-    .notEmpty().withMessage('El tipo de producto es obligatorio')
-    .isIn(['peluche', 'juguete', 'llavero']).withMessage('Tipo inválido')
 ];
 
 const validateIdParam = [

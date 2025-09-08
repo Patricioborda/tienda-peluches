@@ -39,6 +39,7 @@ const Producto = sequelize.define('Producto', {
   imagen: {
     type: DataTypes.STRING(255),
     allowNull: true,
+    defaultValue: "default.png",
     validate: { isUrl: { msg: 'Debe ser URL válida' } }
   },
   categoriaId: {
