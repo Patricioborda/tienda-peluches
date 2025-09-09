@@ -1,56 +1,114 @@
 .categorias-page {
-  padding: 2rem;
-  max-width: 800px;
-  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+}
+
+.page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.page-description {
+  color: #666;
+}
+
+.btn-add {
+  background: #10b981;
+  color: #fff;
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+
+  &:hover {
+    background: #059669;
+  }
+}
+
+.categorias-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
 
   .filtro-input {
-    width: 100%;
-    padding: 0.5rem 1rem;
-    margin-bottom: 1.5rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 10px;
     font-size: 1rem;
+    width: 100%;
+    max-width: 500px;
+    align-self: flex-start;
+  }
+}
+
+.categorias-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.categoria-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  background: #fff;
+
+  span {
+    font-size: 1rem;
+    font-weight: 500;
   }
 
-  .categorias-list {
-    list-style: none;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1rem;
+  .actions {
+    display: flex;
+    gap: 0.5rem;
 
-    .categoria-card {
-      padding: 1rem;
-      border: 1px solid #ddd;
+    .btn-edit {
+      background: #3b82f6;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border: none;
       border-radius: 8px;
-      background-color: #fff;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      cursor: pointer;
 
-      span {
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-      }
-
-      .actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: 0.5rem;
-
-        button:first-child {
-          background-color: #4caf50; /* verde editar */
-        }
-
-        button:last-child {
-          background-color: #f44336; /* rojo eliminar */
-        }
+      &:hover {
+        background: #2563eb;
       }
     }
-  }
 
-  p {
-    text-align: center;
-    color: #666;
+    .btn-delete {
+      background: #ef4444;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+
+      &:hover {
+        background: #dc2626;
+      }
+    }
   }
 }
