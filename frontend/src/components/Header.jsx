@@ -11,7 +11,7 @@ const Header = () => {
       <div className="logo">
         {/* Usamos ruta relativa desde public */}
         <img
-          src="/images/LOGO CAPITAN CAPIBARA V2-SIN FONDO.png"
+          src="/images/LOGO CAPITAN CAPIBARA V2.png"
           alt="Capitán Capibara Logo"
           className="logo-img"
         />
