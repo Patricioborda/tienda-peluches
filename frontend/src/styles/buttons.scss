@@ -1,0 +1,34 @@
+@import "./variables.scss";
+
+@mixin button-base($bg, $color: var(--color-white)) {
+  border: none;
+  border-radius: 12px;
+  padding: 0.8rem 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: $bg;
+  color: $color;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+
+  &:hover:not(:disabled) {
+    background-color: var(--color-accent);
+    color: var(--color-primary);
+    transform: scale(1.05);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+/* Clases de botón reutilizables */
+.btn-primary { @include button-base(var(--color-primary)); }
+.btn-secondary { @include button-base(var(--color-secondary)); }
+.btn-danger { @include button-base(var(--color-danger)); }
+.btn-success { @include button-base(#10b981); }

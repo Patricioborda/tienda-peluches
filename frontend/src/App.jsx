@@ -1,15 +1,14 @@
-// frontend/src/App.jsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import "./styles/global.scss";
 
 // Páginas
 import HomePage from './pages/HomePage.jsx';
 import ProductPage from './pages/ProductPage.jsx';
 import CategoriasPage from './pages/CategoriasPage.jsx';
 
-
 // Componentes
-import Header from './components/Header.js';
+import Header from './components/Header';
 
 const App = () => {
   return (

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { getCategorias, deleteCategoria } from '../services/categoriasService.js';
 import CategoriaForm from './CategoriaForm.jsx';
 import '../styles/CategoriasPage.scss';
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 const CategoriasPage = () => {
   const [categorias, setCategorias] = useState([]);
@@ -16,7 +18,12 @@ const CategoriasPage = () => {
       const data = await getCategorias();
       setCategorias(data);
     } catch (error) {
-      alert('Error cargando categorías');
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Error cargando categorías',
+        confirmButtonColor: '#0A2A43'
+      });
       console.error(error);
     } finally {
       setLoading(false);
@@ -38,12 +45,34 @@ const CategoriasPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('¿Seguro que deseas eliminar esta categoría?')) return;
+    const result = await Swal.fire({
+      title: '¿Seguro que deseas eliminar esta categoría?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#0A2A43',
+      cancelButtonColor: '#B22222',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    });
+
+    if (!result.isConfirmed) return;
+
     try {
       await deleteCategoria(id);
       fetchCategorias();
+      Swal.fire({
+        icon: 'success',
+        title: '¡Eliminado!',
+        text: 'La categoría se ha eliminado correctamente.',
+        confirmButtonColor: '#0A2A43'
+      });
     } catch (error) {
-      alert('Error eliminando categoría');
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Error eliminando categoría',
+        confirmButtonColor: '#0A2A43'
+      });
       console.error(error);
     }
   };
@@ -76,7 +105,6 @@ const CategoriasPage = () => {
       </div>
 
       <div className="categorias-list-container">
-        {/* 🔍 Input de filtro */}
         <input
           type="text"
           placeholder="Filtrar por nombre..."
@@ -85,7 +113,6 @@ const CategoriasPage = () => {
           className="filtro-input"
         />
 
-        {/* 🟢 Caso 1: No hay ninguna categoría en la base */}
         {categorias.length === 0 ? (
           <div className="empty-state">
             <div className="empty-icon">📂</div>
@@ -93,14 +120,12 @@ const CategoriasPage = () => {
             <p className="empty-description">Agrega una categoría para comenzar.</p>
           </div>
         ) : categoriasFiltradas.length === 0 ? (
-          /* 🟡 Caso 2: Hay categorías pero el filtro no encontró nada */
           <div className="empty-state">
             <div className="empty-icon">🔍</div>
             <h2 className="empty-title">Sin resultados</h2>
             <p className="empty-description">No se encontraron categorías que coincidan con tu búsqueda.</p>
           </div>
         ) : (
-          /* 🟢 Caso 3: Mostrar categorías filtradas */
           <ul className="categorias-list">
             {categoriasFiltradas.map((categoria) => (
               <li key={categoria.id} className="categoria-card">
@@ -115,13 +140,13 @@ const CategoriasPage = () => {
         )}
       </div>
 
-      {showModal && (
-        <CategoriaForm
-          onClose={closeModal}
-          onSuccess={fetchCategorias}
-          categoria={selectedCategoria}
-        />
-      )}
+      {/* Modal siempre presente en el DOM */}
+      <CategoriaForm
+        isActive={showModal}
+        onClose={closeModal}
+        onSuccess={fetchCategorias}
+        categoria={selectedCategoria}
+      />
     </div>
   );
 };
