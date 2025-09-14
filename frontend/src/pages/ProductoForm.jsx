@@ -78,7 +78,6 @@ const ProductoForm = ({ isActive, onClose, onSuccess, producto }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validaciones básicas antes de enviar
     if (!formData.nombre.trim()) return Swal.fire({ icon: 'warning', title: 'Nombre requerido', confirmButtonColor: '#0A2A43' });
     if (!formData.precio || parseFloat(formData.precio) <= 0) return Swal.fire({ icon: 'warning', title: 'Precio inválido', confirmButtonColor: '#0A2A43' });
     if (!formData.stock || parseInt(formData.stock) < 0) return Swal.fire({ icon: 'warning', title: 'Stock inválido', confirmButtonColor: '#0A2A43' });
@@ -87,12 +86,22 @@ const ProductoForm = ({ isActive, onClose, onSuccess, producto }) => {
     setIsLoading(true);
 
     try {
-      // Enviamos el objeto tal cual al servicio, que ya construye FormData
+      const dataToSend = new FormData();
+      dataToSend.append('nombre', formData.nombre.trim());
+      dataToSend.append('descripcion', formData.descripcion.trim() || '');
+      dataToSend.append('precio', parseFloat(formData.precio));
+      dataToSend.append('stock', parseInt(formData.stock));
+      dataToSend.append('categoriaId', parseInt(formData.categoriaId));
+
+      // Adjunta la imagen si hay, o marca para remover si se quitó
+      if (formData.imagen) dataToSend.append('imagen', formData.imagen);
+      else if (producto && !preview) dataToSend.append('removeImage', true);
+
       if (producto) {
-        await updateProducto(producto.id, formData);
+        await updateProducto(producto.id, dataToSend);
         Swal.fire({ icon: 'success', title: '¡Actualizado!', confirmButtonColor: '#0A2A43' });
       } else {
-        await createProducto(formData);
+        await createProducto(dataToSend);
         Swal.fire({ icon: 'success', title: '¡Creado!', confirmButtonColor: '#0A2A43' });
       }
 
@@ -100,7 +109,7 @@ const ProductoForm = ({ isActive, onClose, onSuccess, producto }) => {
       onClose();
     } catch (error) {
       Swal.fire({ icon: 'error', title: 'Error guardando producto', confirmButtonColor: '#0A2A43' });
-      console.error(error);
+      console.error('Error al guardar producto:', error.response?.data || error.message);
     } finally {
       setIsLoading(false);
     }
@@ -125,27 +134,17 @@ const ProductoForm = ({ isActive, onClose, onSuccess, producto }) => {
           </select>
 
           <div className="file-dropzone" onDrop={handleDrop} onDragOver={handleDragOver}>
-            {preview ? (
-              <img src={preview} alt="Preview" className="image-preview" />
-            ) : (
-              <p>Arrastra una imagen o haz click para seleccionar</p>
-            )}
+            {preview ? <img src={preview} alt="Preview" className="image-preview" /> : <p>Arrastra una imagen o haz click para seleccionar</p>}
             <input type="file" accept="image/*" onChange={handleFileChange} disabled={isLoading} />
           </div>
 
-          {preview && (
-            <button type="button" className="btn-remove-image" onClick={handleRemoveImage} disabled={isLoading}>
-              Quitar imagen
-            </button>
-          )}
+          {preview && <button type="button" className="btn-remove-image" onClick={handleRemoveImage} disabled={isLoading}>Quitar imagen</button>}
 
           <div className="form-actions">
             <button type="submit" className="btn btn-save" disabled={isLoading}>
               {isLoading ? 'Guardando...' : (producto ? 'Actualizar' : 'Crear')}
             </button>
-            <button type="button" className="btn btn-cancel" onClick={onClose} disabled={isLoading}>
-              Cancelar
-            </button>
+            <button type="button" className="btn btn-cancel" onClick={onClose} disabled={isLoading}>Cancelar</button>
           </div>
         </form>
       </div>

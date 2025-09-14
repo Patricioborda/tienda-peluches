@@ -24,15 +24,13 @@ const ProductosPage = () => {
         text: 'Error cargando productos',
         confirmButtonColor: '#0A2A43'
       });
-      console.error(error);
+      console.error('Error al cargar productos:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchProductos();
-  }, []);
+  useEffect(() => { fetchProductos(); }, []);
 
   const openModal = (producto = null) => {
     setSelectedProducto(producto);
@@ -73,7 +71,7 @@ const ProductosPage = () => {
         text: 'Error eliminando producto',
         confirmButtonColor: '#0A2A43'
       });
-      console.error(error);
+      console.error('Error al eliminar producto:', error);
     }
   };
 
@@ -140,39 +138,39 @@ const ProductosPage = () => {
                     }}
                   />
                   <div className={`stock-badge ${
-                    producto.stock > 10 ? 'high' : 
-                    producto.stock > 5 ? 'medium' : 
+                    producto.stock > 10 ? 'high' :
+                    producto.stock > 5 ? 'medium' :
                     producto.stock > 0 ? 'low' : 'empty'
                   }`}>
                     Stock: {producto.stock}
                   </div>
                 </div>
-                
+
                 <div className="producto-info">
                   <div className="producto-header">
                     <h3 className="producto-nombre">{producto.nombre}</h3>
                     <span className="producto-precio">${producto.precio}</span>
                   </div>
-                  
+
                   <p className="producto-descripcion">
                     {producto.descripcion || "Sin descripción"}
                   </p>
-                  
+
                   <div className="producto-categoria">
                     <span className="categoria-tag">
                       {producto.categoria?.nombre || "Sin categoría"}
                     </span>
                   </div>
-                  
+
                   <div className="actions">
-                    <button 
-                      className="btn btn-edit" 
+                    <button
+                      className="btn btn-edit"
                       onClick={() => openModal(producto)}
                     >
                       Editar
                     </button>
-                    <button 
-                      className="btn btn-delete" 
+                    <button
+                      className="btn btn-delete"
                       onClick={() => handleDelete(producto.id, producto.nombre)}
                     >
                       Eliminar
@@ -184,6 +182,7 @@ const ProductosPage = () => {
           </div>
         )}
       </div>
+
       <ProductoForm
         isActive={showModal}
         onClose={closeModal}

@@ -7,7 +7,7 @@ export const getProductos = async () => {
     const res = await axios.get(`${API_URL}/productos`);
     return res.data;
   } catch (error) {
-    console.error('Error al traer productos:', error);
+    console.error('Error al traer productos:', error.response?.data || error.message);
     throw error;
   }
 };
@@ -16,26 +16,14 @@ export const deleteProducto = async (id) => {
   try {
     await axios.delete(`${API_URL}/productos/${id}`);
   } catch (error) {
-    console.error('Error al eliminar producto:', error);
+    console.error('Error al eliminar producto:', error.response?.data || error.message);
     throw error;
   }
 };
 
-// Usamos FormData para enviar multipart/form-data
 export const createProducto = async (productoData) => {
   try {
-    const formData = new FormData();
-    formData.append('nombre', productoData.nombre);
-    formData.append('descripcion', productoData.descripcion || '');
-    formData.append('precio', productoData.precio);
-    formData.append('stock', productoData.stock);
-    formData.append('categoriaId', productoData.categoriaId);
-
-    if (productoData.imagen) {
-      formData.append('imagen', productoData.imagen); // File object
-    }
-
-    const res = await axios.post(`${API_URL}/productos`, formData, {
+    const res = await axios.post(`${API_URL}/productos`, productoData, {
       headers: { 'Content-Type': 'multipart/form-data' }
     });
     return res.data;
@@ -47,20 +35,7 @@ export const createProducto = async (productoData) => {
 
 export const updateProducto = async (id, productoData) => {
   try {
-    const formData = new FormData();
-    formData.append('nombre', productoData.nombre);
-    formData.append('descripcion', productoData.descripcion || '');
-    formData.append('precio', productoData.precio);
-    formData.append('stock', productoData.stock);
-    formData.append('categoriaId', productoData.categoriaId);
-
-    if (productoData.imagen instanceof File) {
-      formData.append('imagen', productoData.imagen);
-    } else if (productoData.imagen === null) {
-      formData.append('removeImage', true);
-    }
-
-    const res = await axios.put(`${API_URL}/productos/${id}`, formData, {
+    const res = await axios.put(`${API_URL}/productos/${id}`, productoData, {
       headers: { 'Content-Type': 'multipart/form-data' }
     });
     return res.data;
