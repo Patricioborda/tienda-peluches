@@ -12,11 +12,11 @@ const ProductoForm = ({ isActive, onClose, onSuccess, producto }) => {
     precio: '',
     stock: '',
     categoriaId: '',
-    imagen: null // ahora puede ser File
+    imagen: null
   });
   const [categorias, setCategorias] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [preview, setPreview] = useState(null); // para mostrar preview de imagen
+  const [preview, setPreview] = useState(null);
 
   useEffect(() => { fetchCategorias(); }, []);
 
@@ -28,9 +28,9 @@ const ProductoForm = ({ isActive, onClose, onSuccess, producto }) => {
         precio: producto.precio || '',
         stock: producto.stock || '',
         categoriaId: producto.categoriaId || '',
-        imagen: null // reiniciamos la imagen al editar
+        imagen: null
       });
-      setPreview(producto.imagen || null); // preview con la imagen actual
+      setPreview(producto.imagen || null);
     } else {
       setFormData({ nombre: '', descripcion: '', precio: '', stock: '', categoriaId: '', imagen: null });
       setPreview(null);
@@ -68,14 +68,17 @@ const ProductoForm = ({ isActive, onClose, onSuccess, producto }) => {
     }
   };
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
+  const handleDragOver = (e) => { e.preventDefault(); };
+
+  const handleRemoveImage = () => {
+    setFormData(prev => ({ ...prev, imagen: null }));
+    setPreview(null);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validaciones...
+    // Validaciones
     if (!formData.nombre.trim()) return Swal.fire({ icon: 'warning', title: 'Nombre requerido', confirmButtonColor: '#0A2A43' });
     if (!formData.precio || parseFloat(formData.precio) <= 0) return Swal.fire({ icon: 'warning', title: 'Precio inválido', confirmButtonColor: '#0A2A43' });
     if (!formData.stock || parseInt(formData.stock) < 0) return Swal.fire({ icon: 'warning', title: 'Stock inválido', confirmButtonColor: '#0A2A43' });
@@ -84,13 +87,20 @@ const ProductoForm = ({ isActive, onClose, onSuccess, producto }) => {
     setIsLoading(true);
 
     try {
-      const productoData = new FormData(); // usamos FormData para subir archivos
+      const productoData = new FormData();
       productoData.append('nombre', formData.nombre.trim());
       productoData.append('descripcion', formData.descripcion.trim() || '');
       productoData.append('precio', parseFloat(formData.precio));
       productoData.append('stock', parseInt(formData.stock));
       productoData.append('categoriaId', parseInt(formData.categoriaId));
-      if (formData.imagen) productoData.append('imagen', formData.imagen);
+
+      // Solo enviamos imagen si hay archivo
+      if (formData.imagen) {
+        productoData.append('imagen', formData.imagen);
+      } else if (producto && !preview) {
+        // Si estamos editando y quitamos la imagen, indicamos al backend eliminarla
+        productoData.append('removeImage', true);
+      }
 
       if (producto) {
         await updateProducto(producto.id, productoData);
@@ -128,7 +138,7 @@ const ProductoForm = ({ isActive, onClose, onSuccess, producto }) => {
             {categorias.map(c => <option key={c.id} value={c.id}>{c.nombre}</option>)}
           </select>
 
-          {/* Input de imagen con drag & drop */}
+          {/* Dropzone */}
           <div className="file-dropzone" onDrop={handleDrop} onDragOver={handleDragOver}>
             {preview ? (
               <img src={preview} alt="Preview" className="image-preview" />
@@ -138,9 +148,20 @@ const ProductoForm = ({ isActive, onClose, onSuccess, producto }) => {
             <input type="file" accept="image/*" onChange={handleFileChange} disabled={isLoading} />
           </div>
 
+          {/* Botón quitar imagen, fuera del dropzone */}
+          {preview && (
+            <button type="button" className="btn-remove-image" onClick={handleRemoveImage} disabled={isLoading}>
+              Quitar imagen
+            </button>
+          )}
+
           <div className="form-actions">
-            <button type="submit" className="btn btn-save" disabled={isLoading}>{isLoading ? 'Guardando...' : (producto ? 'Actualizar' : 'Crear')}</button>
-            <button type="button" className="btn btn-cancel" onClick={onClose} disabled={isLoading}>Cancelar</button>
+            <button type="submit" className="btn btn-save" disabled={isLoading}>
+              {isLoading ? 'Guardando...' : (producto ? 'Actualizar' : 'Crear')}
+            </button>
+            <button type="button" className="btn btn-cancel" onClick={onClose} disabled={isLoading}>
+              Cancelar
+            </button>
           </div>
         </form>
       </div>

@@ -135,7 +135,7 @@ const ProductosPage = () => {
                     src={producto.imagen || "/images/default.png"}
                     alt={producto.nombre}
                     onError={(e) => {
-                      e.target.onerror = null; // evita loop infinito
+                      e.target.onerror = null;
                       e.target.src = "/images/default.png";
                     }}
                   />
@@ -184,8 +184,6 @@ const ProductosPage = () => {
           </div>
         )}
       </div>
-
-      {/* Modal siempre presente en el DOM */}
       <ProductoForm
         isActive={showModal}
         onClose={closeModal}

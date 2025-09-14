@@ -1,4 +1,4 @@
-@use "./variables.scss" as *; // reemplaza @import
+@use "./variables.scss" as *; // aunque tus variables son CSS custom properties
 
 /* Overlay del modal */
 .modal-overlay {
@@ -87,7 +87,7 @@
       gap: 1rem;
 
       input[name="stock"] {
-        max-width: 120px; // ancho máximo para stock
+        max-width: 120px;
       }
 
       @media (max-width: 680px) {
@@ -137,6 +137,24 @@
       &.drag-over {
         border-color: var(--color-accent);
         background-color: rgba(250, 230, 180, 0.2);
+      }
+    }
+
+    /* Botón quitar imagen fuera del dropzone */
+    .btn-remove-image {
+      margin: 0.5rem 0 1rem 0;
+      padding: 0.4rem 0.8rem;
+      background-color: var(--color-danger);
+      color: var(--color-white);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: darken(#B22222, 10%); // si querés SCSS darken
       }
     }
 
