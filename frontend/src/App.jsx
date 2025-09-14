@@ -4,7 +4,7 @@ import "./styles/global.scss";
 
 // Páginas
 import HomePage from './pages/HomePage.jsx';
-import ProductPage from './pages/ProductPage.jsx';
+import ProductoPage from './pages/ProductosPage.jsx';
 import CategoriasPage from './pages/CategoriasPage.jsx';
 
 // Componentes
@@ -19,7 +19,7 @@ const App = () => {
       {/* Rutas de la aplicación */}
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/productos" element={<ProductPage />} />
+        <Route path="/productos" element={<ProductoPage />} />
         <Route path="/categorias" element={<CategoriasPage />} />
       </Routes>
     </Router>

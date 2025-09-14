@@ -8,15 +8,15 @@ const Header = () => {
   return (
     <header className="app-header">
       {/* Logo */}
-      <div className="logo">
+      <Link to="/" className="logo" onClick={() => setMenuOpen(false)}>
         {/* Usamos ruta relativa desde public */}
         <img
-          src="/images/LOGO CAPITAN CAPIBARA V2.png"
+          src="/images/logo-capitan-capibara-sin-fondo.png"
           alt="Capitán Capibara Logo"
           className="logo-img"
         />
         <h1>Capitán Capibara</h1>
-      </div>
+      </Link>
 
       {/* Botón hamburguesa en mobile */}
       <button

@@ -1,0 +1,152 @@
+@use "./variables.scss" as *; // reemplaza @import de variables
+
+@mixin button-style($bg, $color: var(--color-white)) {
+  background: $bg;
+  color: $color;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover { filter: brightness(1.1); }
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
+}
+
+@mixin card-style {
+  background: var(--color-white);
+  border-radius: 10px;
+  padding: 1rem;
+  transition: all 0.3s ease;
+
+  &:hover { transform: translateY(-2px); border-color: var(--color-accent); }
+}
+
+.producto-card {
+  @include card-style;
+  border: 2px solid var(--color-primary);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  .producto-image {
+    position: relative;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: transform 0.3s ease;
+      display: block;
+    }
+
+    img[src*="default.png"] {
+      object-fit: contain;
+      margin: auto;
+    }
+
+    &:hover img { transform: scale(1.05); }
+
+    .stock-badge {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      backdrop-filter: blur(10px);
+
+      &.high { background: rgba(16, 185, 129, 0.9); color: white; }
+      &.medium { background: rgba(245, 158, 11, 0.9); color: white; }
+      &.low { background: rgba(239, 68, 68, 0.9); color: white; }
+      &.empty { background: rgba(107, 114, 128, 0.9); color: white; }
+    }
+  }
+
+  .producto-info {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+
+    .producto-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+      gap: 0.5rem;
+
+      .producto-nombre {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: var(--color-primary);
+        margin: 0;
+        flex: 1;
+        line-height: 1.3;
+      }
+
+      .producto-precio {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #10b981;
+        flex-shrink: 0;
+      }
+    }
+
+    .producto-descripcion {
+      color: var(--color-secondary);
+      font-size: 0.9rem;
+      line-height: 1.4;
+      margin-bottom: 0.75rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      flex-grow: 1;
+    }
+
+    .producto-categoria {
+      margin-bottom: 1rem;
+
+      .categoria-tag {
+        background: var(--color-secondary);
+        color: var(--color-white);
+        padding: 0.4rem 0.8rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: inline-block;
+      }
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: auto;
+
+      .btn {
+        flex: 1;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.3s ease;
+
+        &.btn-edit {
+          @include button-style(var(--color-secondary));
+          &:hover { background: var(--color-accent); color: var(--color-primary); }
+        }
+
+        &.btn-delete {
+          @include button-style(var(--color-danger));
+          &:hover { background: darkred; }
+        }
+      }
+    }
+  }
+}
