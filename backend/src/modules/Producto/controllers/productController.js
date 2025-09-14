@@ -16,7 +16,9 @@ exports.getProducto = async (req, res, next) => {
 
 exports.createProducto = async (req, res, next) => {
   try {
-    const data = await service.create(req.body);
+    const productoData = { ...req.body };
+    if (req.file) productoData.imagen = req.file.filename;
+    const data = await service.create(productoData);
     res.status(201).json(data);
   } catch (err) {
     res.status(err.statusCode || 500).json({ success: false, error: err.message });
@@ -25,7 +27,11 @@ exports.createProducto = async (req, res, next) => {
 
 exports.updateProducto = async (req, res, next) => {
   try {
-    const data = await service.update(parseInt(req.params.id, 10), req.body);
+    const productoData = { ...req.body };
+    if (req.file) productoData.imagen = req.file.filename;
+    else if (req.body.removeImage === 'true') productoData.imagen = null;
+
+    const data = await service.update(parseInt(req.params.id, 10), productoData);
     res.json(data);
   } catch (err) {
     res.status(err.statusCode || 500).json({ success: false, error: err.message });

@@ -1,4 +1,3 @@
-// frontend/src/services/productoService.js
 import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
@@ -22,14 +21,23 @@ export const deleteProducto = async (id) => {
   }
 };
 
+// Usamos FormData para enviar multipart/form-data
 export const createProducto = async (productoData) => {
   try {
-    const dataToSend = {
-      ...productoData,
-      imagen: productoData.imagen?.trim() || null,
-      descripcion: productoData.descripcion?.trim() || null,
-    };
-    const res = await axios.post(`${API_URL}/productos`, dataToSend);
+    const formData = new FormData();
+    formData.append('nombre', productoData.nombre);
+    formData.append('descripcion', productoData.descripcion || '');
+    formData.append('precio', productoData.precio);
+    formData.append('stock', productoData.stock);
+    formData.append('categoriaId', productoData.categoriaId);
+
+    if (productoData.imagen) {
+      formData.append('imagen', productoData.imagen); // File object
+    }
+
+    const res = await axios.post(`${API_URL}/productos`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
     return res.data;
   } catch (error) {
     console.error('Error al crear producto:', error.response?.data || error.message);
@@ -37,14 +45,24 @@ export const createProducto = async (productoData) => {
   }
 };
 
-export const updateProducto = async (id, data) => {
+export const updateProducto = async (id, productoData) => {
   try {
-    const dataToSend = {
-      ...data,
-      imagen: data.imagen?.trim() || null,
-      descripcion: data.descripcion?.trim() || null,
-    };
-    const res = await axios.put(`${API_URL}/productos/${id}`, dataToSend);
+    const formData = new FormData();
+    formData.append('nombre', productoData.nombre);
+    formData.append('descripcion', productoData.descripcion || '');
+    formData.append('precio', productoData.precio);
+    formData.append('stock', productoData.stock);
+    formData.append('categoriaId', productoData.categoriaId);
+
+    if (productoData.imagen instanceof File) {
+      formData.append('imagen', productoData.imagen);
+    } else if (productoData.imagen === null) {
+      formData.append('removeImage', true);
+    }
+
+    const res = await axios.put(`${API_URL}/productos/${id}`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
     return res.data;
   } catch (error) {
     console.error('Error al actualizar producto:', error.response?.data || error.message);

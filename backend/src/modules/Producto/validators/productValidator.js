@@ -1,9 +1,18 @@
 const { body, param, validationResult } = require('express-validator');
 const Categoria = require('../../Categorias/models/Categoria');
 
+// Sanitize FormData (todos llegan como strings)
+const sanitizeFormData = (req, res, next) => {
+  for (const key in req.body) {
+    if (req.body.hasOwnProperty(key)) {
+      req.body[key] = String(req.body[key]).trim();
+    }
+  }
+  next();
+};
+
 const validateProductoBody = [
   body('nombre')
-    .trim()
     .notEmpty().withMessage('El nombre es obligatorio')
     .isLength({ min: 2, max: 100 }).withMessage('El nombre debe tener entre 2 y 100 caracteres'),
 
@@ -18,10 +27,6 @@ const validateProductoBody = [
   body('stock')
     .notEmpty().withMessage('El stock es obligatorio')
     .isInt({ min: 0 }).withMessage('El stock debe ser un entero >= 0'),
-
-  body('imagen')
-    .optional({ nullable: true, checkFalsy: true })
-    .isURL().withMessage('La imagen debe ser una URL válida'),
 
   body('categoriaId')
     .notEmpty().withMessage('La categoría es obligatoria')
@@ -46,4 +51,4 @@ const handleValidation = (req, res, next) => {
   next();
 };
 
-module.exports = { validateProductoBody, validateIdParam, handleValidation };
+module.exports = { sanitizeFormData, validateProductoBody, validateIdParam, handleValidation };

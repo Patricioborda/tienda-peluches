@@ -77,8 +77,8 @@ const ProductoForm = ({ isActive, onClose, onSuccess, producto }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Validaciones
+
+    // Validaciones básicas antes de enviar
     if (!formData.nombre.trim()) return Swal.fire({ icon: 'warning', title: 'Nombre requerido', confirmButtonColor: '#0A2A43' });
     if (!formData.precio || parseFloat(formData.precio) <= 0) return Swal.fire({ icon: 'warning', title: 'Precio inválido', confirmButtonColor: '#0A2A43' });
     if (!formData.stock || parseInt(formData.stock) < 0) return Swal.fire({ icon: 'warning', title: 'Stock inválido', confirmButtonColor: '#0A2A43' });
@@ -87,26 +87,12 @@ const ProductoForm = ({ isActive, onClose, onSuccess, producto }) => {
     setIsLoading(true);
 
     try {
-      const productoData = new FormData();
-      productoData.append('nombre', formData.nombre.trim());
-      productoData.append('descripcion', formData.descripcion.trim() || '');
-      productoData.append('precio', parseFloat(formData.precio));
-      productoData.append('stock', parseInt(formData.stock));
-      productoData.append('categoriaId', parseInt(formData.categoriaId));
-
-      // Solo enviamos imagen si hay archivo
-      if (formData.imagen) {
-        productoData.append('imagen', formData.imagen);
-      } else if (producto && !preview) {
-        // Si estamos editando y quitamos la imagen, indicamos al backend eliminarla
-        productoData.append('removeImage', true);
-      }
-
+      // Enviamos el objeto tal cual al servicio, que ya construye FormData
       if (producto) {
-        await updateProducto(producto.id, productoData);
+        await updateProducto(producto.id, formData);
         Swal.fire({ icon: 'success', title: '¡Actualizado!', confirmButtonColor: '#0A2A43' });
       } else {
-        await createProducto(productoData);
+        await createProducto(formData);
         Swal.fire({ icon: 'success', title: '¡Creado!', confirmButtonColor: '#0A2A43' });
       }
 
@@ -138,7 +124,6 @@ const ProductoForm = ({ isActive, onClose, onSuccess, producto }) => {
             {categorias.map(c => <option key={c.id} value={c.id}>{c.nombre}</option>)}
           </select>
 
-          {/* Dropzone */}
           <div className="file-dropzone" onDrop={handleDrop} onDragOver={handleDragOver}>
             {preview ? (
               <img src={preview} alt="Preview" className="image-preview" />
@@ -148,7 +133,6 @@ const ProductoForm = ({ isActive, onClose, onSuccess, producto }) => {
             <input type="file" accept="image/*" onChange={handleFileChange} disabled={isLoading} />
           </div>
 
-          {/* Botón quitar imagen, fuera del dropzone */}
           {preview && (
             <button type="button" className="btn-remove-image" onClick={handleRemoveImage} disabled={isLoading}>
               Quitar imagen
