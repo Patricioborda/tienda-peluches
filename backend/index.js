@@ -9,17 +9,15 @@ const { errorHandler, notFound } = require('./src/middlewares/errorMiddleware');
 const { connectDatabase } = require('./src/utils/database');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4000;
 
 // CORS
 const allowedOrigins =
   process.env.NODE_ENV === 'production'
-    ? (process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : ['http://localhost:3000'])
-    : ['http://localhost:3000', 'http://frontend:3000'];
+    ? [process.env.FRONTEND_URL]
+    : ['http://localhost', 'http://localhost:3000', 'http://frontend:80'];
 
 app.use(cors({ origin: allowedOrigins, credentials: true }));
-
-// Middlewares
 app.use(morgan('combined'));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
@@ -36,8 +34,6 @@ app.get('/health', (req, res) => {
 
 // Rutas principales
 app.use('/api', routes);
-
-// Rutas de categorías
 app.use('/api/categorias', categoriasRoutes);
 
 // Not found + manejo de errores
@@ -47,12 +43,11 @@ app.use(errorHandler);
 // Boot
 (async () => {
   try {
-    await connectDatabase(); // autentica y sync en development
+    await connectDatabase();
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`🛍️ Productos API corriendo en puerto ${PORT}`);
       console.log(`🌍 Entorno: ${process.env.NODE_ENV}`);
       console.log(`📊 Base de datos: ${process.env.DB_HOST}:${process.env.DB_PORT || 3306}/${process.env.DB_NAME}`);
-      console.log(`📂 Rutas de categorías activas: /api/categorias`);
     });
   } catch (err) {
     console.error('❌ Error al iniciar la API:', err.message);

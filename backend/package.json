@@ -4,7 +4,8 @@
   "description": "Backend API para tienda Capitán Capibara",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node scripts/start.js",
+    "start:dev": "nodemon index.js",
     "dev": "nodemon index.js",
     "db:create": "node scripts/createDatabase.js",
     "db:drop": "npx sequelize-cli db:drop",

@@ -1,48 +1,42 @@
 # 🧸 Tienda Capitan Capibara
 Sistema integral de gestión para tienda de peluches online.  
-Frontend en **React 19 + SCSS** · Backend en **Node 20 + Express 5 + Sequelize 6** · Base de datos **MySQL 8** · Orquestado con **Docker Compose**.
+Frontend en **React 19 + SCSS** · Backend en **Node 20 + Express 5 + Sequelize 6** · Base de datos **MySQL 8** · Orquestado con **Docker Compose** en VM de **Azure** con **Nginx** como proxy inverso.
+
 ---
 
 ## 👤 Desarrollador
 | Integrante |
 |------------|
-| **[Patricio]** |
+| **Patricio** |
 
 ---
 
 ## 🚀 Stack principal
 | Capa | Tecnologías |
 |------|-------------|
-| **Frontend** | React 19 · React-Router 7 · SCSS (CRA) |
+| **Frontend** | React 19 · React-Router 7 · SCSS (CRA) · Axios |
 | **Backend** | Node 20 · Express 5 · Sequelize 6 |
 | **DB** | MySQL 8.3 |
-| **DevOps** | Docker · Docker Compose · Nodemon · Sequelize-CLI |
+| **DevOps / Infra** | Docker · Docker Compose · Nginx · Azure VM |
 
 ---
 
-## 📁 Estructura general (monorepo)
+## 📁 Estructura general
 ```text
 peluchesApp/
 ├── backend/
 │   ├── src/
-│   │   ├── modules/            # → 1 módulo = 1 carpeta (Producto, Categorias, …)
-│   │   │   └── Producto/
-│   │   │       ├── controllers/
-│   │   │       ├── models/
-│   │   │       ├── repositories/
-│   │   │       ├── services/
-│   │   │       └── validators/
+│   │   ├── modules/
 │   │   ├── migrations/
 │   │   ├── seeders/
 │   │   ├── middlewares/
-│   │   ├── routes/             # index.js concatena rutas de todos los módulos
+│   │   ├── routes/
 │   │   └── utils/
-│   ├── config/
-│   │   └── config.json         # ← usado por Sequelize-CLI dentro del contenedor
-│   ├── .sequelizerc            # paths de modelos / migraciones / seeders
-│   ├── .env                    # vars usadas solo por Node (host=mysql, etc.)
-│   ├── Dockerfile.prod
-│   ├── index.js                # entry-point Express
+│   ├── config/config.json
+│   ├── .sequelizerc
+│   ├── .env
+│   ├── Dockerfile
+│   ├── index.js
 │   └── package.json
 │
 ├── frontend/
@@ -51,146 +45,123 @@ peluchesApp/
 │   │   ├── pages/
 │   │   ├── routes/
 │   │   ├── styles/
-│   │   ├── services/           # axios config y API calls
+│   │   ├── services/
 │   │   ├── App.js
 │   │   └── index.js
 │   ├── public/
-│   ├── Dockerfile.prod
+│   ├── Dockerfile
+│   ├── nginx.conf
 │   └── package.json
 │
 ├── docker-compose.yml
-└── README.md   ← este archivo
-```
+└── README.md
 
-## 🧸 Modelo de datos - Productos
+# 🐳 Levantar la aplicación en producción (Azure VM)
 
-### Tabla: `productos`
-| Campo | Tipo | Descripción | Ejemplo |
-|-------|------|-------------|---------|
-| `id` | INT AUTO_INCREMENT | ID único del producto | 1 |
-| `nombre` | VARCHAR(100) | Nombre del producto | "Osito Teddy Clásico" |
-| `descripcion` | TEXT | Descripción detallada | "Peluche suave de oso marrón..." |
-| `precio` | DECIMAL(10,2) | Precio en pesos | 12500.50 |
-| `stock` | INT | Cantidad disponible | 25 |
-| `imagen` | VARCHAR(255) | URL de la imagen | "https://..." |
-| `categoria` | VARCHAR(50) | Categoría del producto | "Osos", "Unicornios", "Accesorios" |
-| `createdAt` | TIMESTAMP | Fecha de creación | Auto |
-| `updatedAt` | TIMESTAMP | Fecha de actualización | Auto |
-
-## 🔗 API Endpoints - CRUD Productos
-
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| `GET` | `/api/productos` | Obtener todos los productos |
-| `GET` | `/api/productos/:id` | Obtener un producto específico |
-| `POST` | `/api/productos` | Crear nuevo producto |
-| `PUT` | `/api/productos/:id` | Actualizar producto existente |
-| `DELETE` | `/api/productos/:id` | Eliminar producto |
-
-
----
-
-## 🐳 Cómo levantar el proyecto con Docker
-
-1. **Clonar el repositorio:**
+## 1. Clonar repositorio en la VM
 ```bash
 git clone https://github.com/tu-usuario/peluchesApp.git
 cd peluchesApp
-```
 
-2. **Crear el archivo `.env` en `/backend/.env` con el siguiente contenido:**
-```env
-PORT=5000
-DB_NAME=peluches_db
-DB_USER=root
-DB_PASSWORD=peluche123
-DB_HOST=mysql
-NODE_ENV=development
-```
+##.env
 
-3. **Levantar el entorno:**
-```bash
-docker-compose up --build
-```
-El flag `--build` es necesario solo la primera vez o si cambias dependencias.
+```text
+PORT=4000
+DB_NAME=capibara_db
+DB_USER=admin
+DB_PASSWORD=capibara123
+DB_HOST=db
+NODE_ENV=production
 
-4. **Acceder al sistema:**
-- **Frontend:** http://localhost:3000
-- **Backend (API):** http://localhost:5000
-- **Adminer:** http://localhost:8080
+docker compose up -d --build
 
----
+Acceder al sistema desde la IP pública de la VM
 
-## 🗄️ Migraciones con Sequelize-CLI
-### Ejecutar dentro del contenedor
-```bash
-# Aplicar migraciones pendientes
-docker compose exec backend npx sequelize-cli db:migrate
+Frontend (React vía Nginx): http://http://20.201.113.0/
 
-# Revertir la última migración
-docker compose exec backend npx sequelize-cli db:migrate:undo
+Backend (API): http://http://20.201.113.0/api
 
-# Revertir todas las migraciones
-docker compose exec backend npx sequelize-cli db:migrate:undo:all
 
-# Ver estado de migraciones
-docker compose exec backend npx sequelize-cli db:migrate:status
+## nginx
 
-# Ejecutar seeders
-docker compose exec backend npx sequelize-cli db:seed:all
-```
+```text
+server {
+    listen 80;
+    server_name localhost;
 
----
+    root /usr/share/nginx/html;
+    index index.html;
 
-## 🎯 Funcionalidades Implementadas
+    location / {
+        try_files $uri /index.html;
+    }
 
-### Frontend (React)
-- ✅ Lista de peluches con diseño de cards
-- ✅ Formulario para agregar/editar peluches
-- ✅ Eliminación con modal de confirmación
-- ✅ Búsqueda por nombre
-- ✅ Filtros por categoría
-- ✅ Diseño responsive con SCSS
-- ✅ Manejo de estados de carga y errores
+    location /api {
+        proxy_pass http://backend:4000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_connect_timeout 60s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+    }
+}
 
-### Backend (Node.js + Express)
-- ✅ API REST completa con validaciones
-- ✅ Arquitectura modular por features
-- ✅ Middleware de manejo de errores
-- ✅ CORS configurado para desarrollo
-- ✅ Logging de requests
-- ✅ Validaciones con express-validator
 
----
+##🔗 API Endpoints - CRUD Productos
 
-## 📌 Contexto Académico
+| Método   | Endpoint             | Descripción                    |
+| -------- | -------------------- | ------------------------------ |
+| `GET`    | `/api/productos`     | Obtener todos los productos    |
+| `GET`    | `/api/productos/:id` | Obtener un producto específico |
+| `POST`   | `/api/productos`     | Crear nuevo producto           |
+| `PUT`    | `/api/productos/:id` | Actualizar producto existente  |
+| `DELETE` | `/api/productos/:id` | Eliminar producto              |
 
-**Trabajo Práctico N°5** - Desarrollo Full Stack  
-**Objetivos:** Docker, Azure, Desarrollo web, Máquinas virtuales, Nginx  
-**Fecha de entrega:** 31/08/2025  
 
-### Tareas completadas:
-- [ ] Backend API CRUD
-- [ ] Frontend que consume la API
-- [ ] Dockerfiles para backend y frontend
-- [ ] Docker Compose orchestration
-- [ ] Subir imágenes a Docker Hub
-- [ ] Máquina virtual en Azure
-- [ ] Despliegue en producción
-- [ ] Proxy inverso con Nginx (opcional)
+🗄️ Base de datos
 
----
+DB: MySQL 8.
 
-## 📌 Notas adicionales
+Volumen persistente para no perder datos: definido en docker-compose.yml.
 
-- El backend se conecta a MySQL usando el hostname `mysql`, ya que es el nombre del servicio definido en `docker-compose.yml`.
-- Las migraciones se ejecutan automáticamente al levantar el contenedor backend.
-- La base de datos se almacena en un volumen persistente para no perder datos.
-- El frontend incluye hot-reload en desarrollo.
+Migraciones ejecutadas automáticamente al levantar backend en producción.
 
----
+##🎯 Funcionalidades Implementadas Frontend
 
-## 📬 Contacto
+✅ Lista de peluches con diseño de cards
 
-Para bugs o sugerencias sobre **peluchesApp**, contactá al desarrollador.  
-¡Gracias por explorar este proyecto de tienda de peluches y juguetes! 🧸
+✅ Formulario para agregar/editar peluches
+
+✅ Eliminación con modal de confirmación
+
+✅ Búsqueda por nombre y filtros por categoría
+
+✅ Diseño responsive con SCSS
+
+✅ Manejo de estados de carga y errores
+
+## Backend
+
+✅ API REST completa con validaciones
+
+✅ Arquitectura modular por features
+
+✅ Middleware de manejo de errores
+
+✅ Logging de requests
+
+✅ Conexión segura a MySQL
+
+✅ Migraciones y seeders automáticos
+
+## 📌 Notas de producción
+
+Todo el tráfico se sirve desde la IP de la VM vía Nginx.
+
+El backend está accesible únicamente a través del proxy (/api).
+
+La app ya no depende de Sequelize-CLI manual; migraciones se aplican al levantar el contenedor.
+
+Puertos expuestos en Azure: 80 (frontend/Nginx) y 3307 (MySQL) para administración.

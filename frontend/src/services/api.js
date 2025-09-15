@@ -1,9 +1,14 @@
 import axios from 'axios';
 
-// Configuración base de Axios
+const BASE_URL = process.env.REACT_APP_API_URL || '/api';
+
+console.log('REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
+console.log('Base URL final:', BASE_URL);
+
 const api = axios.create({
-  baseURL: 'http://localhost:5000', // Cambiá el puerto si tu backend corre en otro
-  timeout: 5000, // Tiempo máximo de espera
+  baseURL: BASE_URL,
+  timeout: 5000,
+  withCredentials: true, // si manejas cookies o sesión
 });
 
 export default api;
